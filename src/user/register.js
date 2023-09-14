@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -52,10 +52,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  image: {
+    width: 150, // Ajusta el ancho de la imagen según tus necesidades
+    height: 150, // Ajusta la altura de la imagen según tus necesidades
+    marginBottom: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'green', // Cambia el color del título a verde
   },
   input: {
     width: '100%',
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: 'green', // Cambia el color de fondo del botón a verde
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

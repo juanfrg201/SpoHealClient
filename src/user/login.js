@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -9,26 +9,18 @@ const Login = () => {
   const handleRegister = () => {
     // Aquí puedes implementar la lógica de registro, como enviar los datos al servidor
     // También puedes realizar la validación de datos antes de enviarlos
-    console.log('Nombre:', name);
-    console.log('Email:', email);
+    console.log('Nombre de usuario:', name);
     console.log('Contraseña:', password);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Iniciar Sesion</Text>
       <TextInput
         style={styles.input}
         placeholder="Nombre"
         value={name}
         onChangeText={(text) => setName(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Correo Electrónico"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
@@ -38,7 +30,7 @@ const Login = () => {
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
+        <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
     </View>
   );
@@ -52,10 +44,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  image: {
+    width: 150, // Ajusta el ancho de la imagen según tus necesidades
+    height: 150, // Ajusta la altura de la imagen según tus necesidades
+    marginBottom: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'green', // Cambia el color del título a verde
   },
   input: {
     width: '100%',
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: 'green', // Cambia el color de fondo del botón a verde
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

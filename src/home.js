@@ -1,47 +1,53 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 const Home = ({ navigation }) => {
     const goToRegister = () => {
-      navigation.navigate('Register'); // Navegar a la pantalla "Register"
+      navigation.navigate('Register');
     };
 
     const goToLogin = () => {
-      navigation.navigate('Login'); // Navegar a la pantalla "Register"
+      navigation.navigate('Login');
     };
   
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Bienvenido a Spoheal App</Text>
-        <Text style={styles.subtitle}>Explora cómo van a cambiar tus hábitos saludables.</Text>
-        <TouchableOpacity style={styles.greenButton} onPress={goToRegister}>
-          <Text style={styles.buttonText}>Iniciar Registro</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.greenButton} onPress={goToLogin}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image
+          source={require('../assets/HomeImage.png')} 
+          style={styles.image}
+        />
+        <View style={styles.contentWrapper}>
+          <Text style={styles.title}>Bienvenido a Spoheal App</Text>
+          <Text style={styles.subtitle}>Explora cómo van a cambiar tus hábitos saludables.</Text>
+          <TouchableOpacity style={styles.greenButton} onPress={goToRegister}>
+            <Text style={styles.buttonText}>Iniciar Registro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.greenButton} onPress={goToLogin}>
+            <Text style={styles.buttonText}>Iniciar Sesión</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1, // Esto permite que el contenido se expanda y se pueda desplazar
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // Cambia el color de fondo según tu preferencia
+    backgroundColor: '#fff',
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
+    width: 400,
+    height: 400,
+    marginBottom: 0,
   },
   greenButton: {
-    backgroundColor: 'green', // Cambia el color a verde
+    backgroundColor: 'green',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginBottom: 20, // Agrega margen inferior para separar los botones
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: 'blue', // Cambia el color del botón según tu preferencia
+    backgroundColor: 'blue',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -64,6 +70,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  contentWrapper: {
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  }
 });
 
 export default Home;
