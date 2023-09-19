@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image , Button} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-const Register = ({ navigation }) => {
+
+const Parametizer = () => {
   const [name, setName] = useState('');
   const [last_name, setLastName] = useState(''); // Definir last_name
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation_password, setConfirmationPassword] = useState(''); // Definir confirmation_password
-
 
   const handleRegister = async () => {
     try {
@@ -28,13 +27,13 @@ const Register = ({ navigation }) => {
         // Realiza la petición POST al backend utilizando Axios
         const response = await axios.post(backendUrl, data, {
           headers: {
-            'Content-Type': 'application/json ',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
         });
   
         // Verifica si la respuesta tiene éxito (código de estado 200)
         if (response.status === 200) {
-          navigation.navigate('Parametizer');
+          console.log('Respuesta del servidor:', response.data);
   
           // Luego puedes navegar a otra pantalla o realizar alguna acción adicional
         } else {
@@ -54,22 +53,22 @@ const Register = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
+      <Text style={styles.title}>Parametrizacion</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nombre"
+        placeholder="Edad"
         value={name}
         onChangeText={(text) => setName(text)}
       />
       <TextInput
         style={styles.input}
-        placeholder="Apellido"
+        placeholder="Peso"
         value={last_name} // Usar last_name
         onChangeText={(text) => setLastName(text)} // Usar setLastName
       />
       <TextInput
         style={styles.input}
-        placeholder="Correo Electrónico"
+        placeholder="Altura"
         value={email}
         onChangeText={(text) => setEmail(text)}
         keyboardType="email-address"
@@ -136,4 +135,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default Parametizer;
