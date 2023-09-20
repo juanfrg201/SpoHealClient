@@ -1,79 +1,64 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 
 const Index = ({ navigation }) => {
-    const goToRegister = async () => {
-      const token = await AsyncStorage.getItem('auth_token');
-      console.log(token)
-    };
+  // Datos para el carrusel
+  const carouselData = [
+    { title: 'Cracteristicas de los usuarios', description: 'Descripción del Slide 1' },
+    { title: 'Dias que ha usado la app', description: 'Descripción del Slide 2' },
+    { title: 'Recomendacion de actividades de ejercicios', description: 'Descripción del Slide 3' },
+  ];
 
-    const goToLogin = () => {
-      navigation.navigate('Login');
-    };
-  
+  const _renderItem = ({ item }) => {
     return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.contentWrapper}>
-          <Text style={styles.title}>Bienvenido a Spoheal App</Text>
-          <Text style={styles.subtitle}>Explora cómo van a cambiar tus hábitos saludables.</Text>
-          <TouchableOpacity style={styles.greenButton} onPress={goToRegister}>
-            <Text style={styles.buttonText}>Iniciar Registro</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.greenButton} onPress={goToLogin}>
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      <View style={styles.carouselItem}>
+        <Text style={styles.carouselTitle}>{item.title}</Text>
+        <Text style={styles.carouselDescription}>{item.description}</Text>
+      </View>
     );
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image source={require('../../assets/HomeImage.png')} style={styles.image} />
+      <Carousel
+        data={carouselData}
+        renderItem={_renderItem}
+        sliderWidth={400}
+        itemWidth={300}
+      />
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1, // Esto permite que el contenido se expanda y se pueda desplazar
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
   },
   image: {
     width: 400,
-    height: 400,
-    marginBottom: 0,
+    height: 300,
+    marginBottom: 50,
   },
-  greenButton: {
-    backgroundColor: 'green',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+  carouselItem: {
+    backgroundColor: 'white',
     borderRadius: 5,
-    marginBottom: 20,
+    padding: 20,
+    elevation: 3,
   },
-  title: {
-    fontSize: 24,
+  carouselTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  subtitle: {
+  carouselDescription: {
     fontSize: 16,
     color: '#888',
-    marginBottom: 20,
   },
-  button: {
-    backgroundColor: 'blue',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  contentWrapper: {
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  }
 });
 
 export default Index;
