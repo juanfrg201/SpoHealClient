@@ -5,7 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 const Index = ({ navigation }) => {
   // Datos para el carrusel
   const carouselData = [
-    { title: 'Cracteristicas de los usuarios', description: 'Descripción del Slide 1' },
+    { title: 'Caracteristicas de  usuarios', description: 'Descripción del Slide 1' },
     { title: 'Dias que ha usado la app', description: 'Descripción del Slide 2' },
     { title: 'Recomendacion de actividades de ejercicios', description: 'Descripción del Slide 3' },
   ];
