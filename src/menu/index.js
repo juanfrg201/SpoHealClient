@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Home = ({ navigation }) => {
-    const goToRegister = () => {
-      navigation.navigate('Register');
+const Index = ({ navigation }) => {
+    const goToRegister = async () => {
+      const token = await AsyncStorage.getItem('auth_token');
+      console.log(token)
     };
 
     const goToLogin = () => {
@@ -12,10 +14,6 @@ const Home = ({ navigation }) => {
   
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Image
-          source={require('../assets/HomeImage.png')} 
-          style={styles.image}
-        />
         <View style={styles.contentWrapper}>
           <Text style={styles.title}>Bienvenido a Spoheal App</Text>
           <Text style={styles.subtitle}>Explora cómo van a cambiar tus hábitos saludables.</Text>
@@ -78,4 +76,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default Index;
