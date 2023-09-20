@@ -16,11 +16,11 @@ const screens = {
     Login:{
         screen: Login
     },
-    Parametizer:{
-        screen: Parametizer
-    },
     Index:{
         screen: Index
+    },
+    Parametizer:{
+        screen: Parametizer
     }
 }
 const HomeStack = createStackNavigator(screens);

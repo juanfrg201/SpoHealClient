@@ -11,7 +11,7 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
-      const backendUrl = "https://fancy-cameras-play.loca.lt/api/v1/authenticate"; // Reemplaza con la URL correcta
+      const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/authenticate"; // Reemplaza con la URL correcta
   
       // Validar que las contraseñas coincidan
       

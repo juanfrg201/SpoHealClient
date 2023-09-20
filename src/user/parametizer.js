@@ -1,50 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Parametizer = () => {
-  const [name, setName] = useState('');
-  const [last_name, setLastName] = useState(''); // Definir last_name
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmation_password, setConfirmationPassword] = useState(''); // Definir confirmation_password
+const Parametizer = ({ navigation }) => {
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState(''); // Definir last_name
+  const [height, setHeight] = useState('');
+  const [activities, setActivities] = useState([]);
+  const [selectedActivity, setSelectedActivity] = useState('');
+  const [cardiovascular_desease, setDeseas] = useState([]);
+  const [selectedCardiovascularDesease, setCardiovascularDeseas] = useState(''); // Definir confirmation_password
+
+
+  useEffect(() => {
+    // Realiza una solicitud al backend para obtener la lista de actividades
+    axios.get('https://curvy-shirts-notice.loca.lt/api/v1/activities') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
+      .then((response) => {
+        // Si la solicitud es exitosa, actualiza el estado 'activities' con los datos recibidos
+        setActivities(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener la lista de actividades:', error);
+      });
+    axios.get('https://curvy-shirts-notice.loca.lt/api/v1/cardiovascular_deseases') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
+      .then((response) => {
+        // Si la solicitud es exitosa, actualiza el estado 'activities' con los datos recibidos
+        setDeseas(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener la lista de enfermedades:', error);
+      }); 
+  }, []);
 
   const handleRegister = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
-      const backendUrl = "https://fancy-cameras-play.loca.lt/api/v1/users"; // Reemplaza con la URL correcta
+      const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/user_parameterizations"; // Reemplaza con la URL correcta
   
       // Validar que las contraseñas coincidan
-      if (password === confirmation_password) {
-        // Datos a enviar al backend
-        const data = {
-          name,
-          last_name, // Usar last_name
-          email,
-          password,
-        };
-  
-        // Realiza la petición POST al backend utilizando Axios
-        const response = await axios.post(backendUrl, data, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        });
-  
-        // Verifica si la respuesta tiene éxito (código de estado 200)
-        if (response.status === 200) {
-          console.log('Respuesta del servidor:', response.data);
-  
-          // Luego puedes navegar a otra pantalla o realizar alguna acción adicional
+     
+      // Datos a enviar al backend
+      const auth_token = await AsyncStorage.getItem('auth_token');
+      const favorite_activity_name = selectedActivity
+      const select_cardiovascular_deseases = selectedCardiovascularDesease
+      const data = {
+        auth_token,
+        age,
+        weight, 
+        height,// Usar last_name
+        favorite_activity_name,
+        select_cardiovascular_deseases,
+      };
+
+      const response = await axios.post(backendUrl, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        if (auth_token) {
+          navigation.navigate('Index');
         } else {
-          const errorMessage = response.data.error;
-          console.error('Error de autenticación:', errorMessage);
-          // Puedes mostrar el mensaje de error en una alerta, un componente de texto, etc.
-          // Por ejemplo, utilizando un estado en tu componente de React:
+          navigation.navigate('Home');
         }
+  
+        // Luego puedes navegar a otra pantalla o realizar alguna acción adicional
       } else {
-        console.error('Las contraseñas no coinciden');
+        const errorMessage = response.data.error;
+        console.error('Error de autenticación:', errorMessage);
+        // Puedes mostrar el mensaje de error en una alerta, un componente de texto, etc.
+        // Por ejemplo, utilizando un estado en tu componente de React:
       }
+
+      
+      
     } catch (error) {
       // Si ocurre un error durante la petición, puedes manejarlo aquí
       console.error('Error en la petición:', error.message);
@@ -57,38 +89,43 @@ const Parametizer = () => {
       <TextInput
         style={styles.input}
         placeholder="Edad"
-        value={name}
-        onChangeText={(text) => setName(text)}
+        value={age}
+        onChangeText={(text) => setAge(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Peso"
-        value={last_name} // Usar last_name
-        onChangeText={(text) => setLastName(text)} // Usar setLastName
+        value={weight} // Usar last_name
+        onChangeText={(text) => setWeight(text)} // Usar setLastName
       />
       <TextInput
         style={styles.input}
         placeholder="Altura"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        keyboardType="email-address"
+        value={height}
+        onChangeText={(text) => setHeight(text)}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirmar Contraseña"
-        value={confirmation_password}
-        onChangeText={(text) => setConfirmationPassword(text)}
-        secureTextEntry
-      />
+      <Picker
+        selectedValue={selectedActivity}
+        style={styles.picker}
+        onValueChange={(itemValue) => setSelectedActivity(itemValue)}
+      >
+        <Picker.Item label="Selecciona una actividad" value="" />
+        {activities.map((activity) => (
+          <Picker.Item key={activity.identifier} label={activity.name} value={activity.identifier} />
+        ))}
+      </Picker>
+      <Picker
+        selectedValue={selectedCardiovascularDesease}
+        style={styles.picker}
+        onValueChange={(itemValue) => setCardiovascularDeseas(itemValue)}
+      >
+        <Picker.Item label="Tienes alguna enfermedad?" value="" />
+        {cardiovascular_desease.map((cardiovascular_deseas) => (
+          <Picker.Item key={cardiovascular_deseas.identifier} label={cardiovascular_deseas.name} value={cardiovascular_deseas.identifier} />
+        ))}
+      </Picker>
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
+        <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -106,6 +143,16 @@ const styles = StyleSheet.create({
     width: 150, // Ajusta el ancho de la imagen según tus necesidades
     height: 150, // Ajusta la altura de la imagen según tus necesidades
     marginBottom: 20,
+  },
+  picker: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    backgroundColor: '#fff', // Color de fondo del Picker
+    paddingHorizontal: 10,
   },
   title: {
     fontSize: 24,
