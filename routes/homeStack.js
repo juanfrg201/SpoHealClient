@@ -7,12 +7,13 @@ import Parametizer from "../src/user/parametizer"
 import Index from "../src/menu/index"
 
 const screens = {
-    Home:{
-        screen: Home
-    },
     Register:{
         screen: Register
     },
+    Home:{
+        screen: Home
+    },
+    
     Login:{
         screen: Login
     },

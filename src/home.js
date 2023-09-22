@@ -1,38 +1,68 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 
 const Home = ({ navigation }) => {
-    const goToRegister = () => {
-      navigation.navigate('Register');
-    };
+  const goToRegister = () => {
+    navigation.navigate('Register');
+  };
 
-    const goToLogin = () => {
-      navigation.navigate('Login');
-    };
-  
-    return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image
-          source={require('../assets/HomeImage.png')} 
-          style={styles.image}
-        />
-        <View style={styles.contentWrapper}>
-          <Text style={styles.title}>Bienvenido a Spoheal App</Text>
-          <Text style={styles.subtitle}>Explora cómo van a cambiar tus hábitos saludables.</Text>
-          <TouchableOpacity style={styles.greenButton} onPress={goToRegister}>
-            <Text style={styles.buttonText}>Iniciar Registro</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.greenButton} onPress={goToLogin}>
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    );
+  const goToLogin = () => {
+    navigation.navigate('Login');
+  };
+
+  // Cargar la fuente Quicksand con negrita
+  const [fontsLoaded] = useFonts({
+    QuicksandBold: Quicksand_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    // Puedes mostrar un indicador de carga aquí si es necesario
+    return null;
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+       source={require('../assets/LogoSpoheal.jpg')}
+      style={styles.image}
+      />
+      {/* <View style={styles.Titulo}>
+      <Text style={[styles.centeredText, styles.quicksandText]}>SpoHeal APP</Text>
+      </View> */}
+      <View style={styles.contentWrapper}>
+        <Text style={[styles.title, styles.quicksandText]}>Bienvenido a Spoheal App</Text>
+        <Text style={styles.subtitle}>¡Cuida de ti, cada día!</Text>
+        <TouchableOpacity style={styles.Button} onPress={goToRegister}>
+          <Text style={[styles.buttonText, styles.quicksandText]}>Inicia Sesión</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.Button} onPress={goToLogin}>
+          <Text style={[styles.buttonText, styles.quicksandText]}>¡Registrate!</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
+  Titulo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+
+  },
+  centeredText: {
+    textAlign: 'center',
+    fontSize: 24,
+    color: 'green',
+  },
+  quicksandText: {
+    fontFamily: 'QuicksandBold',
+    fontWeight: 'bold',
+  },
   container: {
-    flexGrow: 1, // Esto permite que el contenido se expanda y se pueda desplazar
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -42,13 +72,14 @@ const styles = StyleSheet.create({
     height: 400,
     marginBottom: 0,
   },
-  greenButton: {
+  Button: {
     backgroundColor: 'green',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 20,
   },
+  
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -58,12 +89,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: 'blue',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
   },
   buttonText: {
     color: '#fff',
@@ -75,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 40,
-  }
+  },
 });
 
 export default Home;

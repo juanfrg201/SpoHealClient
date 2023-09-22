@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image , Button} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image , Button,LinearGradient} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles } from './styles';
 
 const Register = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -63,54 +64,52 @@ const Register = ({ navigation }) => {
   };
 
   return (
+    
     <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre"
-        value={name}
-        onChangeText={(text) => setName(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Apellido"
-        value={last_name} // Usar last_name
-        onChangeText={(text) => setLastName(text)} // Usar setLastName
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Correo Electrónico"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Numero de telefono"
-        value={number_phone}
-        onChangeText={(text) => setNumberPhone(text)}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirmar Contraseña"
-        value={confirmation_password}
-        onChangeText={(text) => setConfirmationPassword(text)}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
+      <LinearGradient
+        colors={['#00b300', '#009900']} 
+        style={styles.header}
+      >
+        <Text style={styles.headerText}>Registro</Text>
+      </LinearGradient>
+      
+      <View style={styles.content}>
+        
+        <View style={styles.inputContainer}>
+          <Image
+            source={require('/home/jorge07/SpoHealApp/SpoHealClient/assets/LogoSpoheal.jpg')} 
+            style={styles.logo}
+          />
+          <TextInput
+            placeholder="Usuario"
+            style={styles.input}
+          />
+        </View>
+     
+        <View style={styles.inputContainer}>
+          <Image
+            source={require('/home/jorge07/SpoHealApp/SpoHealClient/assets/LogoSpoheal.jpg')} 
+            style={styles.logo}
+          />
+          <TextInput
+            placeholder="Contraseña"
+            secureTextEntry 
+            style={styles.input}
+          />
+        </View>
+        
+        
+      </View>
+
+      <LinearGradient
+        colors={['#00b300', '#009900']} // Colores del degradado
+        style={styles.footer}
+      >
+        <Text style={styles.footerText}>Pie de página</Text>
+      </LinearGradient>
     </View>
   );
 };
-
+  
 
 export default Register;
