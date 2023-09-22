@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image , Button,LinearGradient} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Button, } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { styles } from './styles';
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 
 const Register = ({ navigation }) => {
   const [name, setName] = useState('');
-  const [last_name, setLastName] = useState(''); // Definir last_name
+  const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation_password, setConfirmationPassword] = useState('');
-  const [number_phone, setNumberPhone] = useState(''); // Definir confirmation_password
-
+  const [number_phone, setNumberPhone] = useState('');
 
   const handleRegister = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
       const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/users"; // Reemplaza con la URL correcta
-  
+
       // Validar que las contraseñas coincidan
       if (password === confirmation_password) {
         // Datos a enviar al backend
@@ -28,14 +27,14 @@ const Register = ({ navigation }) => {
           password,
           number_phone,
         };
-  
+
         // Realiza la petición POST al backend utilizando Axios
         const response = await axios.post(backendUrl, data, {
           headers: {
             'Content-Type': 'application/json ',
           },
         });
-  
+
         // Verifica si la respuesta tiene éxito (código de estado 200)
         if (response.status === 200) {
           auth_token = response.data.auth_token
@@ -46,7 +45,7 @@ const Register = ({ navigation }) => {
           } else {
             // El usuario no está autenticado
           }
-  
+
           // Luego puedes navegar a otra pantalla o realizar alguna acción adicional
         } else {
           const errorMessage = response.data.error;
@@ -64,52 +63,136 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    
+
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#00b300', '#009900']} 
-        style={styles.header}
-      >
-        <Text style={styles.headerText}>Registro</Text>
-      </LinearGradient>
-      
-      <View style={styles.content}>
-        
-        <View style={styles.inputContainer}>
+      <View style={styles.formContainer}>
+        <Text style={[styles.title, styles.quicksandText, { color: '#39A466' }]}>¡REGISTRATE!</Text>
+        {/* Contenedor del logo y los inputs */}
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
           <Image
-            source={require('/home/jorge07/SpoHealApp/SpoHealClient/assets/LogoSpoheal.jpg')} 
+            source={require('../../assets/user.png')}
             style={styles.logo}
           />
           <TextInput
-            placeholder="Usuario"
             style={styles.input}
+            placeholder="Nombre"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
           />
         </View>
-     
-        <View style={styles.inputContainer}>
+        {/* Campo de password ----------------------------------------------------------------*/}
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
           <Image
-            source={require('/home/jorge07/SpoHealApp/SpoHealClient/assets/LogoSpoheal.jpg')} 
+            source={require('../../assets/key.png')}
             style={styles.logo}
           />
           <TextInput
+            style={styles.input}
             placeholder="Contraseña"
-            secureTextEntry 
-            style={styles.input}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
           />
         </View>
-        
-        
+        {/* Campo de eMail -------------------------------------------------------------------------------*/}
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image
+            source={require('../../assets/email.png')}
+            style={styles.logo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Correo Electrónico"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+        </View>
       </View>
 
-      <LinearGradient
-        colors={['#00b300', '#009900']} // Colores del degradado
-        style={styles.footer}
-      >
-        <Text style={styles.footerText}>Pie de página</Text>
-      </LinearGradient>
+      {/* Botón "Registrarse" fuera del formulario */}
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
     </View>
   );
 };
-  
+
+const styles = StyleSheet.create({
+
+
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', // Centra horizontalmente en el medio de la pantalla
+    backgroundColor: '#C7E1AD',
+
+  },
+  formContainer: {
+    backgroundColor: 'white',
+    width: '80%',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center', // Centra horizontalmente en el medio del formulario
+    marginTop: 20, // Centra verticalmente en el medio de la pantalla
+    marginLeft: 20, // Ajusta este valor para mover el formulario hacia la derecha
+    marginRight: 20, // Ajusta este valor para mover el formulario hacia la izquierda
+    shadowColor: '#39A466', // Color de la sombra
+    shadowOffset: { width: 0, height: 2 }, // Offset (desplazamiento) de la sombra
+    shadowOpacity: 0.5, // Opacidad de la sombra (0 a 1)
+    shadowRadius: 5, // Radio de la sombra
+    elevation: 5, // Elevación de la sombra en Android
+  },
+  logoAndInputsContainer: {
+    flexDirection: 'row', // Coloca el logo y los inputs en fila
+    alignItems: 'center', // Alinea verticalmente en el centro
+
+  },
+  logo: {
+    width: 25,
+    height: 25,
+    marginRight: 15, // Añade un margen entre la imagen y el input
+  },
+  input: {
+    flex: 1, // Los inputs se expanden para ocupar el espacio restante
+    height: 40,
+    marginBottom: 10,
+    borderBottomWidth: 1, // Ancho de la línea inferior
+    borderColor: 'black', // Color de la línea inferior
+    paddingBottom: 0, // Espaciado opcional en la parte inferior
+  },
+  button: {
+    backgroundColor: '#39A466',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20, // Ajusta la distancia entre el formulario y el botón
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  imageContainer: {
+    marginBottom: 20,
+  },
+  quicksandText: {
+    fontFamily: 'QuicksandBold',
+    fontWeight: 'bold',
+  },
+
+  placeholder: {
+    paddingTop: 0, // Ajusta este valor según tus preferencias
+  },
+});
 
 export default Register;
