@@ -7,6 +7,7 @@ import Parametizer from "../src/user/parametizer"
 import Index from "../src/menu/index"
 
 const screens = {
+    
     Login:{
         screen: Login
     },
@@ -21,9 +22,7 @@ const screens = {
     Index:{
         screen: Index
     },
-    Parametizer:{
-        screen: Parametizer
-    }
+    
 }
 const HomeStack = createStackNavigator(screens);
 

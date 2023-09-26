@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, } from 'react-native';
+import {View,Text,TextInput,TouchableOpacity,StyleSheet,Image,} from 'react-native';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -54,16 +54,16 @@ const Login = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Text
-          style={[styles.title, styles.quicksandText, { color: '#39A466' }]}>¡REGISTRATE!</Text>
+          style={[styles.title, styles.quicksandText, { color: '#39A466' }]}>Inicia Sesión!</Text>
         {/* Contenedor del logo y los inputs */}
         <View style={styles.logoAndInputsContainer}>
           {/* Logo */}
           <Image source={require('../../assets/user.png')} style={styles.logo} />
           <TextInput
             style={styles.input}
-            placeholder="Nombre"
+            placeholder="Correo Electronico"
             value={email}
-            onChangeText={(text) => setemail(text)}
+            onChangeText={(text) => setEmail(text)}
             marginBottom={0} // Reducir el espacio entre cada input
             placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
           />
@@ -97,40 +97,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    alignItems: 'center', // Centra horizontalmente en el medio de la pantalla
+    backgroundColor: '#C7E1AD',
+
+  },
+  formContainer: {
+    backgroundColor: 'white',
+    width: '80%',
+    borderRadius: 10,
     padding: 20,
+    alignItems: 'center', // Centra horizontalmente en el medio del formulario
+    marginTop: 20, // Centra verticalmente en el medio de la pantalla
+    marginLeft: 20, // Ajusta este valor para mover el formulario hacia la derecha
+    marginRight: 20, // Ajusta este valor para mover el formulario hacia la izquierda
+    shadowColor: '#39A466', // Color de la sombra
+    shadowOffset: { width: 0, height: 2 }, // Offset (desplazamiento) de la sombra
+    shadowOpacity: 0.5, // Opacidad de la sombra (0 a 1)
+    shadowRadius: 5, // Radio de la sombra
+    elevation: 5, // Elevación de la sombra en Android
   },
-  image: {
-    width: 25, // Ajusta el ancho de la imagen según tus necesidades
-    height: 25, // Ajusta la altura de la imagen según tus necesidades
-    marginBottom: 20,
+  logoAndInputsContainer: {
+    flexDirection: 'row', // Coloca el logo y los inputs en fila
+    alignItems: 'center', // Alinea verticalmente en el centro
+
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'green', // Cambia el color del título a verde
+  logo: {
+    width: 25,
+    height: 25,
+    marginRight: 15, // Añade un margen entre la imagen y el input
   },
   input: {
-    width: '100%',
+    flex: 1, // Los inputs se expanden para ocupar el espacio restante
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
     marginBottom: 10,
+    borderBottomWidth: 1, // Ancho de la línea inferior
+    borderColor: 'black', // Color de la línea inferior
+    paddingBottom: 0, // Espaciado opcional en la parte inferior
   },
   button: {
-    backgroundColor: 'green', // Cambia el color de fondo del botón a verde
+    backgroundColor: '#39A466',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginTop: 20, // Ajusta la distancia entre el formulario y el botón
   },
   buttonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  imageContainer: {
+    marginBottom: 20,
+  },
+  quicksandText: {
+    fontFamily: 'QuicksandBold',
+    fontWeight: 'bold',
+  },
+
+  placeholder: {
+    paddingTop: 0, // Ajusta este valor según tus preferencias
   },
 });
 
