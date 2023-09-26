@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, } from 'react-native';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -11,10 +8,11 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
-      const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/authenticate"; // Reemplaza con la URL correcta
-  
+      const backendUrl =
+        'https://curvy-shirts-notice.loca.lt/api/v1/authenticate'; // Reemplaza con la URL correcta
+
       // Validar que las contraseñas coincidan
-      
+
       // Datos a enviar al backend
       const data = {
         email,
@@ -30,7 +28,7 @@ const Login = ({ navigation }) => {
 
       // Verifica si la respuesta tiene éxito (código de estado 200)
       if (response.status === 200) {
-        auth_token = response.data.auth_token
+        auth_token = response.data.auth_token;
         AsyncStorage.setItem('auth_token', auth_token);
         const token = await AsyncStorage.getItem('auth_token');
         if (token) {
@@ -38,7 +36,6 @@ const Login = ({ navigation }) => {
         } else {
           // El usuario no está autenticado
         }
-    
 
         // Luego puedes navegar a otra pantalla o realizar alguna acción adicional
       } else {
@@ -55,20 +52,39 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesion</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Correo"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-      />
+      <View style={styles.formContainer}>
+        <Text
+          style={[styles.title, styles.quicksandText, { color: '#39A466' }]}>¡REGISTRATE!</Text>
+        {/* Contenedor del logo y los inputs */}
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image source={require('../../assets/user.png')} style={styles.logo} />
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre"
+            value={email}
+            onChangeText={(text) => setemail(text)}
+            marginBottom={0} // Reducir el espacio entre cada input
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+        </View>
+        {/* Campo de password ----------------------------------------------------------------*/}
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image source={require('../../assets/key.png')} style={styles.logo} />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            marginBottom={0} // Reducir el espacio entre cada input
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+        </View>
+      </View>
+
+      {/* Botón "Registrarse" fuera del formulario */}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
@@ -77,6 +93,7 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -85,8 +102,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   image: {
-    width: 150, // Ajusta el ancho de la imagen según tus necesidades
-    height: 150, // Ajusta la altura de la imagen según tus necesidades
+    width: 25, // Ajusta el ancho de la imagen según tus necesidades
+    height: 25, // Ajusta la altura de la imagen según tus necesidades
     marginBottom: 20,
   },
   title: {

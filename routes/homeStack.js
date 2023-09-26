@@ -7,6 +7,9 @@ import Parametizer from "../src/user/parametizer"
 import Index from "../src/menu/index"
 
 const screens = {
+    Login:{
+        screen: Login
+    },
     Register:{
         screen: Register
     },
@@ -14,9 +17,7 @@ const screens = {
         screen: Home
     },
     
-    Login:{
-        screen: Login
-    },
+    
     Index:{
         screen: Index
     },
