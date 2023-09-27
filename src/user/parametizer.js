@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tw from 'twrnc';
+import { StatusBar } from 'expo-status-bar';
 
 const Parametizer = ({ navigation }) => {
   const [age, setAge] = useState('');
@@ -84,8 +86,9 @@ const Parametizer = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Parametrizacion</Text>
+    <View style={tw`flex-1 justify-center items-center `}>
+      <Text style={tw`text-green-700 text-3xl font-bold`}>Parametrizacion</Text>
+      <StatusBar style='dark'> </StatusBar>
       <TextInput
         style={styles.input}
         placeholder="Edad"
@@ -124,21 +127,21 @@ const Parametizer = ({ navigation }) => {
           <Picker.Item key={cardiovascular_deseas.identifier} label={cardiovascular_deseas.name} value={cardiovascular_deseas.identifier} />
         ))}
       </Picker>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Continuar</Text>
+      <TouchableOpacity style={tw `bg-green-500 p-3 rounded-lg`} onPress={handleRegister}>
+        <Text style={tw `text-white text-3xl font-bold`}>Continuar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 20,
-  },
+  // container: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#fff',
+  //   padding: 20,
+  // },
   image: {
     width: 150, // Ajusta el ancho de la imagen según tus necesidades
     height: 150, // Ajusta la altura de la imagen según tus necesidades
@@ -154,12 +157,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', // Color de fondo del Picker
     paddingHorizontal: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'green', // Cambia el color del título a verde
-  },
+  // title: {
+  //   fontSize: 24,
+  //   fontWeight: 'bold',
+  //   marginBottom: 20,
+  //   color: 'green', // Cambia el color del título a verde
+  // },
   input: {
     width: '100%',
     height: 40,
