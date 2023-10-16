@@ -9,10 +9,9 @@ import Index from "../src/menu/index"
 const screens = {
     Parametizer:{
         screen: Parametizer
+        
     },
-    Login:{
-        screen: Login
-    },
+    
     Register:{
         screen: Register
     },
