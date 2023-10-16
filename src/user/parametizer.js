@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tw from 'twrnc';
+
 
 const Parametizer = ({ navigation }) => {
   const [age, setAge] = useState('');
@@ -84,8 +86,8 @@ const Parametizer = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Parametrizacion</Text>
+    <View style={tw`flex-1 justify-center items-center `}>
+      <Text style={styles.title}>Parametrización</Text>
       <TextInput
         style={styles.input}
         placeholder="Edad"
@@ -145,14 +147,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   picker: {
-    width: '100%',
+    width: '80%', // Ajusta el ancho de los TextInput según tus preferencias
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 10,
-    backgroundColor: '#fff', // Color de fondo del Picker
     paddingHorizontal: 10,
+    marginBottom: 10,
   },
   title: {
     fontSize: 24,
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     color: 'green', // Cambia el color del título a verde
   },
   input: {
-    width: '100%',
+    width: '80%', // Ajusta el ancho de los TextInput según tus preferencias
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginTop: 100,
   },
   buttonText: {
     color: '#fff',
