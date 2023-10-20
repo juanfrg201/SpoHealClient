@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, FlatList } from 'react-native';
-import { StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 const ProfileScreen = () => {
   const carouselData = [
     {
-      messages: [
-        { id: 1, text: 'Mensaje 1', image: require('../../assets/key.png') },
-        { id: 2, text: 'Mensaje 2', image: require('../../assets/key.png') },
-        { id: 3, text: 'Mensaje 2', image: require('../../assets/key.png') },
-      ],
+      customSection: (
+        <View style={[styles.customSectionContainer, { backgroundColor: '#dcefc9' }]}>
+          <View style={styles.customColumn}>
+            <Text>Lunes</Text>
+          </View>
+          <View style={styles.customColumn}>
+            <Text>Tu puedes</Text>
+          </View>
+          <View style={styles.customColumn}>
+            <View style={styles.centeredContent}>
+              <Image source={require('../../assets/favourite.png')} style={styles.customImage} />
+            </View>
+          </View>
+        </View>
+      ),
     },
     {
       charts: <Text>Gráfica 1</Text>,
@@ -33,7 +42,7 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image
-          source={require('../../assets/ruiz.jpeg')}
+          source={require('../../assets/LogoBG.png')}
           style={styles.profileImage}
         />
       </View>
@@ -56,6 +65,11 @@ const ProfileScreen = () => {
                 { width: screenWidth },
               ]}
             >
+              {item.customSection && (
+                <View style={styles.customSectionContainer}>
+                  {item.customSection}
+                </View>
+              )}
               {item.charts && (
                 <View style={styles.chartContainer}>
                   {item.charts}
@@ -95,10 +109,10 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   headerContainer: {
     flex: 0.3,
-    //backgroundColor: 'lightblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -106,15 +120,15 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   profileImage: {
-    width: "75%",
+    width: "100%",
     height: "100%",
-    resizeMode: 'center',
+    resizeMode: 'cover',
   },
   pageIndicatorContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20, // Añade margen inferior para separar el indicador del contenido
+    marginBottom: 20,
   },
   pageIndicator: {
     width: 10,
@@ -124,19 +138,49 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   currentPageIndicator: {
-    width: 12,
-    height: 12,
+    width: 10,
+    height: 10,
     backgroundColor: 'green',
     borderRadius: 6,
-    marginLeft: 0,
-    marginRight: 0,
-    transform: [{ scale: 1.2 }], // Aplica una pequeña escala al indicador actual
+    margin: 0,
+    transform: [{ scale: 1.2 }],
   },
   carouselContainer: {
     flex: 1,
     borderWidth: 1,
     borderColor: 'lightgray',
+    backgroundColor: "#d7eec1",
     padding: 20,
+  },
+  customSectionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 0,
+    borderColor: 'green',  // Cambiar a color rojo u otro color de tu elección
+    borderWidth: 2,       // Ancho del borde
+    borderRadius: 10,     // Radio de borde para hacerlo redondeado
+    padding: 10,         // Espacio interno dentro del contenedor
+    backgroundColor: "white",
+  },
+  customSectionContent: {
+    alignItems: 'center', // Centrar elementos hijos verticalmente
+  },
+
+  customSectionText: {
+    fontSize: 16,
+    textAlign: 'center', // Centrar texto horizontalmente
+  },
+
+  customColumn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+  customImage: {
+    width: 30,
+    height: 30,
   },
   chartContainer: {
     borderBottomWidth: 1,
@@ -159,6 +203,11 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  centeredContent: {
+    marginLeft: 20, // Puedes ajustar el valor según la cantidad de desplazamiento que desees
+
+
+  }
 });
 
 export default ProfileScreen;
