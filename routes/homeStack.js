@@ -6,6 +6,7 @@ import Login from "../src/user/login"
 import Parametizer from "../src/user/parametizer"
 import Index from "../src/menu/index"
 import Inicio from "../src/user/inicio"
+import Community from "../src/user/community"
 
 const screens = {
     Inicio:{
@@ -27,8 +28,8 @@ const screens = {
     Index:{
         screen: Index
     },
-    Inicio:{
-        screen: Inicio
+    Community:{
+        screen: Community
     },
     
     

@@ -1,26 +1,62 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Lista from '../../assets/lista.png';
+import Perfil from '../../assets/usuario.png';
+import Ruta from '../../assets/ruta.png';
+import Comunidades from '../../assets/comunidades.png';
 
-const ProfileScreen = () => {
+// Importa tus pantallas aquí
+import LoginScreen from './login.js';
+import ParametizerScreen from './parametizer.js';
+//import RegisterScreen from './register.js';
+
+const Tab = createBottomTabNavigator();
+
+const ProfileScreen = ({ navigation }) => {
   const carouselData = [
     {
-      customSection: (
-        <View style={[styles.customSectionContainer, { backgroundColor: '#dcefc9' }]}>
-          <View style={styles.customColumn}>
-            <Text>Lunes</Text>
-          </View>
-          <View style={styles.customColumn}>
-            <Text>Tu puedes</Text>
-          </View>
-          <View style={styles.customColumn}>
-            <View style={styles.centeredContent}>
-              <Image source={require('../../assets/favourite.png')} style={styles.customImage} />
-            </View>
-          </View>
-        </View>
-      ),
+      customSections: [
+        {
+          title: 'Lunes',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Martes',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Miércoles',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Jueves',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Viernes',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Sábado',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+        {
+          title: 'Domingo',
+          description: 'Tu puedes',
+          image: require('../../assets/favourite.png'),
+        },
+      ],
     },
     {
+      customSections: [],
       charts: <Text>Gráfica 1</Text>,
       messages: [
         { id: 17, text: 'Mensaje 3' },
@@ -65,11 +101,17 @@ const ProfileScreen = () => {
                 { width: screenWidth },
               ]}
             >
-              {item.customSection && (
-                <View style={styles.customSectionContainer}>
-                  {item.customSection}
+              {item.customSections && item.customSections.map((section, i) => (
+                <View key={i} style={styles.customSectionContainer}>
+                  <View style={styles.customSection}>
+                    <Text>{section.title}</Text>
+                    <Text>{section.description}</Text>
+                    <View style={styles.centeredContent}>
+                      <Image source={section.image} style={styles.customImage} />
+                    </View>
+                  </View>
                 </View>
-              )}
+              ))}
               {item.charts && (
                 <View style={styles.chartContainer}>
                   {item.charts}
@@ -102,6 +144,52 @@ const ProfileScreen = () => {
           />
         ))}
       </View>
+
+      {/* Barra de tareas */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={styles.tabBarButton}
+          onPress={() => {
+            // Navega a la pantalla de Login
+            navigation.navigate('Login');
+          }}
+        >
+          <Image source={Lista} style={styles.tabBarImage} />
+          <Text style={styles.tabBarText}>Ejercicios</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.tabBarButton}
+          onPress={() => {
+            // Navega a la pantalla de Parametizer
+            navigation.navigate('Parametizer');
+          }}
+        >
+          <Image source={Perfil} style={styles.tabBarImage} />
+          <Text style={styles.tabBarText}>Perfil</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.tabBarButton}
+          onPress={() => {
+
+            navigation.navigate('Register');
+          }}
+        >
+          <Image source={Ruta} style={styles.tabBarImage} />
+          <Text style={styles.tabBarText}>Ruta</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.tabBarButton}
+          onPress={() => {
+
+            navigation.navigate('Community');
+          }}
+        >
+          <Image source={Comunidades} style={styles.tabBarImage} />
+          <Text style={styles.tabBarText}>Comunidades</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -128,7 +216,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    //marginBottom: 5,
+    backgroundColor: "#d7eec1"
   },
   pageIndicator: {
     width: 10,
@@ -136,6 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'gray',
     margin: 5,
+
   },
   currentPageIndicator: {
     width: 10,
@@ -144,39 +234,38 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     margin: 0,
     transform: [{ scale: 1.2 }],
+
   },
   carouselContainer: {
     flex: 1,
     borderWidth: 1,
     borderColor: 'lightgray',
     backgroundColor: "#d7eec1",
-    padding: 20,
+    padding: 15,
+  },
+  // customSectionContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   marginBottom: 10, 
+  //   borderColor: 'green', 
+  //   borderWidth: 2, 
+  //   borderRadius: 10, 
+  //   padding: 7, 
+  //   backgroundColor: "white",
+  // },
+  customSection: {
+    borderWidth: 2,             
+    borderColor: 'green',      
+    borderRadius: 10,          
+    padding: 7,               
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   customSectionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 0,
-    borderColor: 'green',  // Cambiar a color rojo u otro color de tu elección
-    borderWidth: 2,       // Ancho del borde
-    borderRadius: 10,     // Radio de borde para hacerlo redondeado
-    padding: 10,         // Espacio interno dentro del contenedor
-    backgroundColor: "white",
-  },
-  customSectionContent: {
-    alignItems: 'center', // Centrar elementos hijos verticalmente
-  },
-
-  customSectionText: {
-    fontSize: 16,
-    textAlign: 'center', // Centrar texto horizontalmente
-  },
-
-  customColumn: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
+    marginBottom: 10,
   },
   customImage: {
     width: 30,
@@ -204,9 +293,28 @@ const styles = StyleSheet.create({
     height: 30,
   },
   centeredContent: {
-    marginLeft: 20, // Puedes ajustar el valor según la cantidad de desplazamiento que desees
-
-
+    marginLeft: 20,
+  },
+  // Estilos para la barra de tareas
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: '#146c51',
+    height: 70,
+  },
+  tabBarButton: {
+    flex: 1,
+    padding: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 0,
+  },
+  tabBarText: {
+    color: 'white',
+    fontSize: 13,
+  },
+  tabBarImage: {
+    width: 20,
+    height: 20,
   }
 });
 
