@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,7 +6,9 @@ import Lista from '../../assets/lista.png';
 import Perfil from '../../assets/usuario.png';
 import Ruta from '../../assets/ruta.png';
 import Comunidades from '../../assets/comunidades.png';
-
+import axios from 'axios';
+import { API_URL } from '@enviroment';
+import NavigationBar from '../modal/NavigatorBar';
 // Importa tus pantallas aquí
 import LoginScreen from './login.js';
 import ParametizerScreen from './parametizer.js';
@@ -15,45 +17,9 @@ import ParametizerScreen from './parametizer.js';
 const Tab = createBottomTabNavigator();
 
 const ProfileScreen = ({ navigation }) => {
-  const carouselData = [
+  const [carouselData, setCarouselData] = useState([
     {
-      customSections: [
-        {
-          title: 'Lunes',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Martes',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Miércoles',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Jueves',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Viernes',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Sábado',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-        {
-          title: 'Domingo',
-          description: 'Tu puedes',
-          image: require('../../assets/favourite.png'),
-        },
-      ],
+      customSections: [],
     },
     {
       customSections: [],
@@ -69,7 +35,49 @@ const ProfileScreen = ({ navigation }) => {
         { id: 6, text: 'Mensaje 6' },
       ],
     },
-  ];
+  ]);
+
+  const ruta = "/api/v1/active_days?user_id=1";
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Realiza la solicitud GET a tu API
+    axios.get(API_URL + ruta)
+      .then(response => {
+        const customSections = response.data.days.map(day => ({
+          title: day.day,
+          description: "Tu puedes",
+          image: require('../../assets/favourite.png'),
+        }));
+  
+        // Actualiza el estado con la información obtenida
+        setCarouselData(prevData => [
+          {
+            customSections: customSections,
+          },
+          ...prevData.slice(1) // Mantén los demás datos sin cambios
+        ]);
+  
+        // Después de la solicitud GET, realiza la solicitud POST
+        axios.post(API_URL + '/api/v1/active_days?user_id=1', {
+          // Aquí coloca los datos que deseas enviar en la solicitud POST
+          // Por ejemplo:
+          parametro1: 'valor1',
+          parametro2: 'valor2',
+        })
+        .then(response => {
+          // Maneja la respuesta de la solicitud POST
+          console.log('Solicitud POST exitosa:', response.data);
+        })
+        .catch(error => {
+
+        });
+  
+      })
+      .catch(error => {
+        console.error('Error al obtener datos desde el servidor:', error);
+      });
+  }, []);
 
   const screenWidth = Dimensions.get('window').width;
   const [currentPage, setCurrentPage] = useState(0);
@@ -145,51 +153,7 @@ const ProfileScreen = ({ navigation }) => {
         ))}
       </View>
 
-      {/* Barra de tareas */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity
-          style={styles.tabBarButton}
-          onPress={() => {
-            // Navega a la pantalla de Login
-            navigation.navigate('Login');
-          }}
-        >
-          <Image source={Lista} style={styles.tabBarImage} />
-          <Text style={styles.tabBarText}>Ejercicios</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.tabBarButton}
-          onPress={() => {
-            // Navega a la pantalla de Parametizer
-            navigation.navigate('Parametizer');
-          }}
-        >
-          <Image source={Perfil} style={styles.tabBarImage} />
-          <Text style={styles.tabBarText}>Perfil</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.tabBarButton}
-          onPress={() => {
-
-            navigation.navigate('Register');
-          }}
-        >
-          <Image source={Ruta} style={styles.tabBarImage} />
-          <Text style={styles.tabBarText}>Ruta</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabBarButton}
-          onPress={() => {
-
-            navigation.navigate('Community');
-          }}
-        >
-          <Image source={Comunidades} style={styles.tabBarImage} />
-          <Text style={styles.tabBarText}>Comunidades</Text>
-        </TouchableOpacity>
-      </View>
+      <NavigationBar navigation={navigation} />
     </View>
   );
 };
@@ -265,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   customSectionContainer: {
-    marginBottom: 10,
+    marginBottom: 10
   },
   customImage: {
     width: 30,

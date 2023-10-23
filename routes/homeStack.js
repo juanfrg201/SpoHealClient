@@ -7,6 +7,9 @@ import Parametizer from "../src/user/parametizer"
 import Index from "../src/menu/index"
 import Inicio from "../src/user/inicio"
 import Community from "../src/user/community"
+import CommunityPost from "../src/user/community_post"
+import CreateCommunityPost from "../src/user/create_community_post"
+import CommunityCreate from "../src/user/communities/create"
 
 const screens = {
     Inicio:{
@@ -23,13 +26,21 @@ const screens = {
     Home:{
         screen: Home
     },
-    
+    CommunityPost: {
+        screen: CommunityPost
+    },
+    CreateCommunityPost:{
+        screen: CreateCommunityPost
+    },
     
     Index:{
         screen: Index
     },
     Community:{
         screen: Community
+    },
+    CommunityCreate:{
+        screen: CommunityCreate
     },
     
     

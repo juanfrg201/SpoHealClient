@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import Lista from '../../assets/lista.png';
-import Perfil from '../../assets/usuario.png';
-import Ruta from '../../assets/ruta.png';
-import Comunidades from '../../assets/comunidades.png';
+import axios from 'axios';
+import { API_URL } from '@enviroment';
+import NavigationBar from '../modal/NavigatorBar';
 
-const ProfileScreen = ({ navigation }) => {
+
+const Community = ({ navigation }) => {
+    const ruta = "/api/v1/community";
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        // Realiza la solicitud GET a tu aplicación de Rails
+        axios.get(API_URL + ruta)
+        .then(response => {
+            // Si la solicitud es exitosa, actualiza el estado 'data' con los datos recibos
+            setData(response.data.communities); // Asegúrate de acceder al arreglo correcto
+        })
+        .catch(error => {
+            console.error('Error al obtener datos desde el servidor:', error);
+        });
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -15,101 +30,57 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
             <ScrollView style={styles.contentContainer}>
-                <View style={[styles.customSectionContainer, styles.firstCustomSection]}>
-                    <View style={styles.leftSection}>
-                        <View style={styles.imageContainer}>
-                            <Image source={require('../../assets/corredor.png')} style={styles.customImage} />
-                        </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        // Navega a la vista deseada al hacer clic en el botón "Crear Comunidad"
+                        navigation.navigate('CommunityCreate'); // Reemplaza 'NuevaComunidad' con el nombre de tu vista de creación de comunidad
+                    }}
+                >
+                    <Text style={styles.buttonText}>Crear Comunidad</Text>
+                </TouchableOpacity>
+                {data.map((item, index) => (
+                    <View style={styles.customSectionContainer}>
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => {
+                                // Redirige a la vista "CommunityPost" y pasa el ID de la comunidad
+                                navigation.navigate('CommunityPost', { communityId: item.id });
+                            }}
+                        >
+                            <View style={styles.rightSection}>
+                                <View style={styles.borderedSection}>
+                                    <Text style={styles.sectionText}>{item.name}</Text>
+                                </View>
+                                <View style={styles.borderedSection}>
+                                    <Text style={styles.Text2}>{item.issue}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.rightSection}>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.sectionText}>Running</Text>
-                        </View>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.Text2}>El running, footing, correr o jogging, son algunos de los términos más usados en la actualidad para referirse a la carrera continua, el acto por el que alternativamente los pies tocan el suelo a una velocidad mayor que al andar.</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.customSectionContainer}>
-                    <View style={styles.leftSection}>
-                        <View style={styles.imageContainer}>
-                            <Image source={require('../../assets/ciclismo.png')} style={styles.customImage} />
-                        </View>
-                    </View>
-                    <View style={styles.rightSection}>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.sectionText}>Cicla</Text>
-                        </View>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.Text2}>El running, footing, correr o jogging, son algunos de los términos más usados en la actualidad para referirse a la carrera continua, el acto por el que alternativamente los pies tocan el suelo a una velocidad mayor que al andar.</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.customSectionContainer}>
-                    <View style={styles.leftSection}>
-                        <View style={styles.imageContainer}>
-                            <Image source={require('../../assets/pesa.png')} style={styles.customImage} />
-                        </View>
-                    </View>
-                    <View style={styles.rightSection}>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.sectionText}>Pesas</Text>
-                        </View>
-                        <View style={styles.borderedSection}>
-                            <Text style={styles.Text2}>El running, footing, correr o jogging, son algunos de los términos más usados en la actualidad para referirse a la carrera continua, el acto por el que alternativamente los pies tocan el suelo a una velocidad mayor que al andar.</Text>
-                        </View>
-
-                    </View>
-                </View>
+                ))}
             </ScrollView>
-            {/* Barra de tareas */}
-            <View style={styles.tabBar}>
-                <TouchableOpacity
-                    style={styles.tabBarButton}
-                    onPress={() => {
-                        // Navega a la pantalla de Login
-                        navigation.navigate('Login');
-                    }}
-                >
-                    <Image source={Lista} style={styles.tabBarImage} />
-                    <Text style={styles.tabBarText}>Ejercicios</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.tabBarButton}
-                    onPress={() => {
-                        // Navega a la pantalla de Parametizer
-                        navigation.navigate('Parametizer');
-                    }}
-                >
-                    <Image source={Perfil} style={styles.tabBarImage} />
-                    <Text style={styles.tabBarText}>Perfil</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.tabBarButton}
-                    onPress={() => {
-                        // Navega a la pantalla de Register
-                        navigation.navigate('Register');
-                    }}
-                >
-                    <Image source={Ruta} style={styles.tabBarImage} />
-                    <Text style={styles.tabBarText}>Ruta</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.tabBarButton}
-                    onPress={() => {
-                        // Navega a la pantalla de Register
-                        navigation.navigate('Register');
-                    }}
-                >
-                    <Image source={Comunidades} style={styles.tabBarImage} />
-                    <Text style={styles.tabBarText}>Comunidades</Text>
-                </TouchableOpacity>
-            </View>
+            <NavigationBar navigation={navigation} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    addButton: {
+        position: 'absolute',
+        bottom: 16,
+        right: 16,
+        backgroundColor: 'white',
+        borderRadius: 30, // Esto puede variar según tus preferencias
+        width: 60,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    addButtonText: {
+        color: '#146c51', // Color de texto
+        fontSize: 16, // Tamaño de fuente
+    },
     container: {
         flex: 1,
         backgroundColor: "white",
@@ -200,5 +171,21 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
     },
+    button: {
+        backgroundColor: '#39A466',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 20,
+        marginLeft: 40,
+        marginRight: 40, 
+        marginBottom: 30,// Ajusta la distancia entre el formulario y el botón
+        marginTop: 40,
+      },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });
-export default ProfileScreen;
+export default Community;
