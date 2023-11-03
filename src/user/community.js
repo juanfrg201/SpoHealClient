@@ -23,12 +23,7 @@ const Community = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Image
-                    source={require('../../assets/LogoBG_p.png')}
-                    style={styles.profileImage}
-                />
-            </View>
+            <CardImage />
             <ScrollView style={styles.contentContainer}>
                 <TouchableOpacity
                     style={styles.button}

@@ -1,24 +1,38 @@
 import React, { useState, useEffect  } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
+import { API_URL } from '@enviroment';
 
 
 const Parametizer = ({ navigation }) => {
   const [age, setAge] = useState('');
-  const [weight, setWeight] = useState(''); // Definir last_name
+  const [weight, setWeight] = useState(''); 
   const [height, setHeight] = useState('');
   const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState('');
   const [cardiovascular_desease, setDeseas] = useState([]);
   const [selectedCardiovascularDesease, setCardiovascularDeseas] = useState(''); // Definir confirmation_password
+  const [sportMedicalRestriction, setSportMedicalRestriction] = useState(false);
+  const [sportMusclePains, setSportMusclePains] = useState(false);
+  const [generalPain, setGeneralPain] = useState(false);
+  const [isHypertension, setIsHypertension] = useState(false);
+  const [isAsthma, setIsAsthma] = useState(false);
+  const [isChestPain, setIsChestPain] = useState(false);
+  const [painCardiac, setPainCardiac] = useState(false);
+  const [cardiacFamilyPain, setCardiacFamilyPain] = useState(false);
+  const [cholesterolPain, setCholesterolPain] = useState(false);
+  const [dizzinessPain, setDizzinessPain] = useState(false);
+  const [smokePain, setSmokePain] = useState(false);
+  const [covid19, setCovid19] = useState(false);
 
 
   useEffect(() => {
     // Realiza una solicitud al backend para obtener la lista de actividades
-    axios.get('https://curvy-shirts-notice.loca.lt/api/v1/activities') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
+
+    axios.get(API_URL+'/api/v1/activities') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
       .then((response) => {
         // Si la solicitud es exitosa, actualiza el estado 'activities' con los datos recibidos
         setActivities(response.data);
@@ -26,7 +40,7 @@ const Parametizer = ({ navigation }) => {
       .catch((error) => {
         console.error('Error al obtener la lista de actividades:', error);
       });
-    axios.get('https://curvy-shirts-notice.loca.lt/api/v1/cardiovascular_deseases') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
+    axios.get(API_URL+'/api/v1/cardiovascular_deseases') // Reemplaza 'URL_DEL_BACKEND' con la URL correcta
       .then((response) => {
         // Si la solicitud es exitosa, actualiza el estado 'activities' con los datos recibidos
         setDeseas(response.data);
@@ -38,22 +52,34 @@ const Parametizer = ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      // URL del backend donde enviarás los datos del registro
-      const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/user_parameterizations"; // Reemplaza con la URL correcta
-  
+
+      const ruta = "/api/v1/user_parameterizations";
+      const backendUrl = API_URL + ruta; 
       // Validar que las contraseñas coincidan
      
       // Datos a enviar al backend
-      const auth_token = await AsyncStorage.getItem('auth_token');
+      const auth_token = await AsyncStorage.getItem('user_id');
       const favorite_activity_name = selectedActivity
       const select_cardiovascular_deseases = selectedCardiovascularDesease
       const data = {
         auth_token,
         age,
         weight, 
-        height,// Usar last_name
+        height,
         favorite_activity_name,
         select_cardiovascular_deseases,
+        sportMedicalRestriction,
+        sportMusclePains,
+        generalPain,
+        isHypertension,
+        isAsthma,
+        isChestPain,
+        painCardiac,
+        cardiacFamilyPain,
+        cholesterolPain,
+        dizzinessPain,
+        smokePain,
+        covid19
       };
 
       const response = await axios.post(backendUrl, data, {
@@ -64,7 +90,7 @@ const Parametizer = ({ navigation }) => {
 
       if (response.status === 200) {
         if (auth_token) {
-          navigation.navigate('Index');
+          navigation.navigate('Inicio');
         } else {
           navigation.navigate('Home');
         }
@@ -86,27 +112,28 @@ const Parametizer = ({ navigation }) => {
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center `}>
-      <Text style={styles.title}>Parametrización</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Edad"
-        value={age}
-        onChangeText={(text) => setAge(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Peso"
-        value={weight} // Usar last_name
-        onChangeText={(text) => setWeight(text)} // Usar setLastName
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Altura"
-        value={height}
-        onChangeText={(text) => setHeight(text)}
-      />
-      <Picker
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Parametrización</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Edad"
+          value={age}
+          onChangeText={(text) => setAge(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Peso"
+          value={weight}
+          onChangeText={(text) => setWeight(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Altura"
+          value={height}
+          onChangeText={(text) => setHeight(text)}
+        />
+        <Picker
         selectedValue={selectedActivity}
         style={styles.picker}
         onValueChange={(itemValue) => setSelectedActivity(itemValue)}
@@ -126,11 +153,62 @@ const Parametizer = ({ navigation }) => {
           <Picker.Item key={cardiovascular_deseas.identifier} label={cardiovascular_deseas.name} value={cardiovascular_deseas.identifier} />
         ))}
       </Picker>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Continuar</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes alguna restriccion de hacer ejercicio?</Text>
+          <Switch value={sportMedicalRestriction} onValueChange={(value) => setSportMedicalRestriction(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes alguna restriccion musular?</Text>
+          <Switch value={sportMusclePains} onValueChange={(value) => setSportMusclePains(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes alguna restriccion general?</Text>
+          <Switch value={generalPain} onValueChange={(value) => setGeneralPain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes hipertension?</Text>
+          <Switch value={isHypertension} onValueChange={(value) => setIsHypertension(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes Asma?</Text>
+          <Switch value={isAsthma} onValueChange={(value) => setIsAsthma(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes dolo en el pecho al hacer ejercicio?</Text>
+          <Switch value={isChestPain} onValueChange={(value) => setIsChestPain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes alguna enfermedad cardiovascular?</Text>
+          <Switch value={painCardiac} onValueChange={(value) => setPainCardiac(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes algun familia con restricciones cardiovasculares?</Text>
+          <Switch value={cardiacFamilyPain} onValueChange={(value) => setCardiacFamilyPain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Tienes problemas de colesterol?</Text>
+          <Switch value={cholesterolPain} onValueChange={(value) => setCholesterolPain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Te da mareo ?</Text>
+          <Switch value={dizzinessPain} onValueChange={(value) => setDizzinessPain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Fumas?</Text>
+          <Switch value={smokePain} onValueChange={(value) => setSmokePain(value)} />
+        </View>
+        <View style={styles.booleanField}>
+          <Text>Covid-19</Text>
+          <Switch value={covid19} onValueChange={(value) => setCovid19(value)} />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Continuar</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -138,22 +216,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 20,
+    paddingHorizontal: 20,
+    backgroundColor: 'white'
   },
-  image: {
-    width: 150, // Ajusta el ancho de la imagen según tus necesidades
-    height: 150, // Ajusta la altura de la imagen según tus necesidades
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
-  picker: {
-    width: '80%', // Ajusta el ancho de los TextInput según tus preferencias
+  input: {
     height: 40,
+    width: '100%',
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 5,
+    marginBottom: 15,
     paddingHorizontal: 10,
-    marginBottom: 10,
+  },
+  picker: {
+    height: 40,
+    width: '100%',
+    marginBottom: 15,
+  },
+  booleanField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  booleanLabel: {
+    flex: 1,
+    fontSize: 16,
   },
   title: {
     fontSize: 24,
@@ -181,6 +272,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  scrollViewContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
   },
 });
 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import {View,Text,TextInput,TouchableOpacity,StyleSheet,Image,} from 'react-native';
+import { API_URL } from '@enviroment';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -8,8 +11,7 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
-      const backendUrl =
-        'https://curvy-shirts-notice.loca.lt/api/v1/authenticate'; // Reemplaza con la URL correcta
+      const backendUrl = API_URL + '/api/v1/authenticate'; // Reemplaza con la URL correcta
 
       // Validar que las contraseñas coincidan
 
@@ -28,13 +30,11 @@ const Login = ({ navigation }) => {
 
       // Verifica si la respuesta tiene éxito (código de estado 200)
       if (response.status === 200) {
-        auth_token = response.data.auth_token;
-        AsyncStorage.setItem('auth_token', auth_token);
-        const token = await AsyncStorage.getItem('auth_token');
-        if (token) {
-          navigation.navigate('Index');
-        } else {
-          // El usuario no está autenticado
+        user_id = response.data.user_id;
+        await AsyncStorage.setItem('user_id', ""+user_id);
+        const token = await AsyncStorage.getItem('user_id');
+        if (token){
+          navigation.navigate('Inicio');
         }
 
         // Luego puedes navegar a otra pantalla o realizar alguna acción adicional

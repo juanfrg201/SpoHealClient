@@ -10,18 +10,29 @@ import Community from "../src/user/community"
 import CommunityPost from "../src/user/community_post"
 import CreateCommunityPost from "../src/user/create_community_post"
 import CommunityCreate from "../src/user/communities/create"
+import LogoutButton from "../src/modal/LogoutButton"
 
-const screens = {
+const screens = { 
+    Home:{
+        screen: Home
+    },
     Inicio:{
         screen: Inicio
     },
-    Parametizer:{
-        screen: Parametizer
-        
-    },
-    
     Register:{
         screen: Register
+    },
+    LogoutButton:{
+        screen: LogoutButton
+    },
+    Parametizer:{
+        screen: Parametizer 
+    },
+    Parametizer:{
+        screen: Parametizer 
+    },
+    Login:{
+        screen: Login
     },
     Home:{
         screen: Home
