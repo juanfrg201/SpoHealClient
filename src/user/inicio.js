@@ -12,8 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //import RegisterScreen from './register.js';
 
 const ProfileScreen = ({ navigation }) => {
-
-  const [authToken, setAuthToken] = useState(null);
+  const [authToken, setAuthToken] = useState('');
   const [carouselData, setCarouselData] = useState([
     {
       customSections: [],
@@ -24,12 +23,6 @@ const ProfileScreen = ({ navigation }) => {
       messages: [
         { id: 17, text: 'Mensaje 3' },
         { id: 18, text: 'Mensaje 4' },
-      ],
-    },
-    {
-      messages: [
-        { id: 5, text: 'Mensaje 5' },
-        { id: 6, text: 'Mensaje 6' },
       ],
     },
   ]);
@@ -49,8 +42,8 @@ const ProfileScreen = ({ navigation }) => {
     try {
       const token = await AsyncStorage.getItem('user_id');
       if (token !== null && token !== 0) {
-        setAuthToken(token);
         console.log(token)
+        setAuthToken(token);
       } else {
         // No se encontró un token, redirigir al inicio
         navigation.navigate('Inicio'); /// Reemplaza 'Inicio' con la pantalla de inicio correcta
@@ -60,17 +53,16 @@ const ProfileScreen = ({ navigation }) => {
       console.error('Error al verificar el token:', error);
     }
   };
-  console.log(authToken)
-  useEffect(() => {
+  useEffect( async () => {
     checkAuthToken();
-    axios.get(API_URL + "/api/v1/active_days?auth_token=${authToken}")
+    const token = await AsyncStorage.getItem('user_id');
+    axios.get(`${API_URL}/api/v1/active_days?auth_token=${token}`)
       .then(response => {
         const customSections = response.data.days.map(day => ({
           title: day.day,
           description: "Tu puedes",
           image: require('../../assets/favourite.png'),
         }));
-        console.log(token)
   
         // Actualiza el estado con la información obtenida
         setCarouselData(prevData => [
@@ -79,21 +71,7 @@ const ProfileScreen = ({ navigation }) => {
           },
           ...prevData.slice(1) // Mantén los demás datos sin cambios
         ]);
-  
-        // Después de la solicitud GET, realiza la solicitud POST
-        axios.post(API_URL + '/api/v1/active_days?auth_token=${token}', {
-          // Aquí coloca los datos que deseas enviar en la solicitud POST
-          // Por ejemplo:
-          parametro1: 'valor1',
-          parametro2: 'valor2',
-        })
-        .then(response => {
-          // Maneja la respuesta de la solicitud POST
-          console.log('Solicitud POST exitosa:', response.data);
-        })
-        .catch(error => {
-
-        });
+        navigation.navigate('Inicio');
   
       })
       .catch(error => {

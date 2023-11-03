@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '@enviroment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Create = ({ navigation }) => {
@@ -10,14 +11,14 @@ const Create = ({ navigation }) => {
 
   const handleCreateCommunity = async () => {
     try {
-      // URL del backend donde enviarás los datos de creación de comunidad
+      const token = await AsyncStorage.getItem('user_id')
       const env_url = API_URL
       const url = "/api/v1/community"
       const backendUrl = env_url + url; // Reemplaza con la URL correcta
 
       // Datos a enviar al backend
       const data = {
-        user_id: 1,
+        user_id: token,
         name,
         issue,
       };

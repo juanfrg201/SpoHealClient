@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '@enviroment';
 import NavigationBar from '../modal/NavigatorBar';
-
+import CardImage from '../modal/CardImage';
+import { Card } from 'react-native-elements';
 
 const Community = ({ navigation }) => {
-    const ruta = "/api/v1/community";
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Realiza la solicitud GET a tu aplicación de Rails
-        axios.get(API_URL + ruta)
-        .then(response => {
-            // Si la solicitud es exitosa, actualiza el estado 'data' con los datos recibos
-            setData(response.data.communities); // Asegúrate de acceder al arreglo correcto
-        })
-        .catch(error => {
-            console.error('Error al obtener datos desde el servidor:', error);
-        });
+        const fetchCommunityData = async () => {
+            try {
+                const apiUrl = `${API_URL}/api/v1/community`;
+                const response = await axios.get(apiUrl);
+
+                if (response.data && response.data.communities) {
+                    setData(response.data.communities);
+                }
+            } catch (error) {
+                console.error('Error al obtener datos desde la API:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCommunityData();
     }, []);
 
     return (
@@ -28,14 +36,15 @@ const Community = ({ navigation }) => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        // Navega a la vista deseada al hacer clic en el botón "Crear Comunidad"
-                        navigation.navigate('CommunityCreate'); // Reemplaza 'NuevaComunidad' con el nombre de tu vista de creación de comunidad
+                        navigation.navigate('CommunityCreate');
                     }}
                 >
                     <Text style={styles.buttonText}>Crear Comunidad</Text>
                 </TouchableOpacity>
-                {data.map((item, index) => (
-                    <View style={styles.customSectionContainer}>
+                {loading ? (
+                    <ActivityIndicator size="large" color="#39A466" style={styles.loadingIndicator} />
+                ) : (
+                    data.map((item, index) => (
                         <TouchableOpacity
                             key={index}
                             onPress={() => {
@@ -43,17 +52,25 @@ const Community = ({ navigation }) => {
                                 navigation.navigate('CommunityPost', { communityId: item.id });
                             }}
                         >
-                            <View style={styles.rightSection}>
-                                <View style={styles.borderedSection}>
-                                    <Text style={styles.sectionText}>{item.name}</Text>
+                            <Card key={index} containerStyle={styles.cardContainer}>
+                                <Card.Title>{item.name}</Card.Title>
+                                <Card.Divider />
+                                <View style={styles.cardContent}>
+                                    <View style={styles.leftSection}>
+                                        <Image
+                                            source={require('../../assets/corredor.png')}
+                                            style={styles.customImage}
+                                        />
+                                    </View>
+                                    <View style={styles.rightSection}>
+                                        <Text style={styles.sectionText}>{item.name}</Text>
+                                        <Text style={styles.Text2}>{item.issue}</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.borderedSection}>
-                                    <Text style={styles.Text2}>{item.issue}</Text>
-                                </View>
-                            </View>
+                            </Card>
                         </TouchableOpacity>
-                    </View>
-                ))}
+                    ))
+                )}
             </ScrollView>
             <NavigationBar navigation={navigation} />
         </View>
@@ -61,45 +78,20 @@ const Community = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    addButton: {
-        position: 'absolute',
-        bottom: 16,
-        right: 16,
-        backgroundColor: 'white',
-        borderRadius: 30, // Esto puede variar según tus preferencias
-        width: 60,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    addButtonText: {
-        color: '#146c51', // Color de texto
-        fontSize: 16, // Tamaño de fuente
+    customImageLarge: {
+        width: 100, // Ajusta el ancho de la imagen según tus necesidades
+        height: 100, // Ajusta la altura de la imagen según tus necesidades
     },
     container: {
         flex: 1,
-        backgroundColor: "white",
-        
-    },
-    headerContainer: {
-        flex: 0.415, // Incrementamos un poco la altura
-        alignItems: 'center',
-        justifyContent: 'center',
-        
+        backgroundColor: 'white',
     },
     contentContainer: {
         flex: 0.6,
-        backgroundColor: "#d7eec1",
-        borderWidth: 1, // Agrega un borde
-        borderColor: 'lightgray', // Color del borde
-        
-        marginTop: 0, // Margen exterior
-        
-    },
-    profileImage: {
-        width: "100%",
-        height: "100%",
-        resizeMode: 'cover',
+        backgroundColor: '#d7eec1',
+        borderWidth: 1,
+        borderColor: 'lightgray',
+        marginTop: 0,
     },
     customSectionContainer: {
         flexDirection: 'row',
@@ -107,11 +99,10 @@ const styles = StyleSheet.create({
         borderColor: 'green',
         borderWidth: 3,
         borderRadius: 10,
-        backgroundColor: "white",
+        backgroundColor: 'white',
         margin: 10,
         padding: 10,
-        marginTop: 10, // Agregamos margen superior
-        
+        marginTop: 10,
     },
     borderedSection: {
         borderWidth: 2,
@@ -120,20 +111,43 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
     },
-    firstCustomSection: {
-        marginTop: 20, // Incrementamos el margen superior en el primer contenedor
-        
+    Text2: {},
+    button: {
+        backgroundColor: '#39A466',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 20,
+        marginLeft: 40,
+        marginRight: 40,
+        marginBottom: 30,
+        marginTop: 40,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    loadingIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cardContainer: {
+        padding: 10,
+        marginBottom: 10,
+        borderColor: '#32a260', // Color del borde verde
+        borderWidth: 2, // Ancho del borde
+        borderRadius: 10, // Radio de borde para hacerlo más redondeado
+    },
+    cardContent: {
+        flexDirection: 'row',
     },
     leftSection: {
         flex: 1,
     },
     rightSection: {
         flex: 2,
-    },
-    imageContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     customImage: {
         width: 100,
@@ -142,10 +156,8 @@ const styles = StyleSheet.create({
     sectionText: {
         fontWeight: 'bold',
         fontSize: 16,
-        textAlign: 'center',
     },
     Text2: {},
-    // Estilos para la barra de tareas
     tabBar: {
         flexDirection: 'row',
         backgroundColor: '#146c51',
@@ -166,21 +178,9 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
     },
-    button: {
-        backgroundColor: '#39A466',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
+    loadingIndicator: {
         marginTop: 20,
-        marginLeft: 40,
-        marginRight: 40, 
-        marginBottom: 30,// Ajusta la distancia entre el formulario y el botón
-        marginTop: 40,
-      },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
     },
 });
+
 export default Community;

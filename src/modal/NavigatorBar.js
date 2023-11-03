@@ -12,7 +12,7 @@ const NavigationBar = ({ navigation,  active }) => {
                 style={styles.tabBarButton}
                 onPress={() => {
                     // Navega a la pantalla de Ejercicios
-                    navigation.navigate('Ejercicios');
+                    navigation.navigate('Ejercice');
                 }}
             >
                 <Image source={Lista} style={styles.tabBarImage} />
