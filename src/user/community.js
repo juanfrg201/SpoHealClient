@@ -10,6 +10,7 @@ const Community = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         const fetchCommunityData = async () => {
             try {

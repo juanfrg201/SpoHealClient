@@ -9,6 +9,7 @@ import LogoutButton from '../modal/LogoutButton';
 import CardImage from '../modal/CardImage';
 // Importa tus pantallas aquí
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 //import RegisterScreen from './register.js';
 
 const ProfileScreen = ({ navigation }) => {
@@ -26,8 +27,6 @@ const ProfileScreen = ({ navigation }) => {
       ],
     },
   ]);
-
-  const [data, setData] = useState([]);
 
   const handleLogout = async () => {
     try {
@@ -55,7 +54,7 @@ const ProfileScreen = ({ navigation }) => {
   };
   useEffect( async () => {
     checkAuthToken();
-    const token = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('user_id'); 
     axios.get(`${API_URL}/api/v1/active_days?auth_token=${token}`)
       .then(response => {
         const customSections = response.data.days.map(day => ({
@@ -70,8 +69,7 @@ const ProfileScreen = ({ navigation }) => {
             customSections: customSections,
           },
           ...prevData.slice(1) // Mantén los demás datos sin cambios
-        ]);
-        navigation.navigate('Inicio');
+        ])
   
       })
       .catch(error => {
