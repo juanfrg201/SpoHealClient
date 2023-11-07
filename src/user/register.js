@@ -3,29 +3,32 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Button, } f
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
+import { API_URL } from '@enviroment';
 
 const Register = ({ navigation }) => {
   const [name, setName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmation_password, setConfirmationPassword] = useState('');
+  const [password_confirmation, setConfirmationPassword] = useState('');
   const [number_phone, setNumberPhone] = useState('');
 
   const handleRegister = async () => {
     try {
       // URL del backend donde enviarás los datos del registro
-      const backendUrl = "https://curvy-shirts-notice.loca.lt/api/v1/users"; // Reemplaza con la URL correcta
+      const backendUrl = API_URL + "/api/v1/users"; // Reemplaza con la URL correcta
 
       // Validar que las contraseñas coincidan
-      if (password === confirmation_password) {
+      if (password === password_confirmation) {
         // Datos a enviar al backend
         const data = {
+          user: {
           name,
           last_name, // Usar last_name
           email,
           password,
-          number_phone,
+          number_phone
+          }
         };
 
         // Realiza la petición POST al backend utilizando Axios
@@ -37,9 +40,10 @@ const Register = ({ navigation }) => {
 
         // Verifica si la respuesta tiene éxito (código de estado 200)
         if (response.status === 200) {
-          auth_token = response.data.auth_token
-          AsyncStorage.setItem('auth_token', auth_token);
-          const token = await AsyncStorage.getItem('auth_token');
+          user_id = response.data.user_id
+          AsyncStorage.removeItem('user_id');
+          AsyncStorage.setItem('user_id',"" + user_id);
+          const token = await AsyncStorage.getItem('user_id');
           if (token) {
             navigation.navigate('Parametizer');
           } else {
@@ -83,6 +87,36 @@ const Register = ({ navigation }) => {
             placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
           />
         </View>
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image
+            source={require('../../assets/user.png')}
+            style={styles.logo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Apellido"
+            value={last_name}
+            onChangeText={(text) => setLastName(text)}
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+        </View>
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image
+            source={require('../../assets/user.png')}
+            style={styles.logo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Numero"
+            value={number_phone}
+            onChangeText={(text) => setNumberPhone(text)}
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+        </View>
         {/* Campo de password ----------------------------------------------------------------*/}
         <View style={styles.logoAndInputsContainer}>
           {/* Logo */}
@@ -99,6 +133,24 @@ const Register = ({ navigation }) => {
             marginBottom={0} // Reducir el espacio entre cada input 
             placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
           />
+          
+        </View>
+        <View style={styles.logoAndInputsContainer}>
+          {/* Logo */}
+          <Image
+            source={require('../../assets/key.png')}
+            style={styles.logo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Repite Contraseña"
+            value={password_confirmation}
+            onChangeText={(text) => setConfirmationPassword(text)}
+            secureTextEntry
+            marginBottom={0} // Reducir el espacio entre cada input 
+            placeholderStyle={styles.placeholder} // Establece el estilo del placeholder
+          />
+          
         </View>
         {/* Campo de eMail -------------------------------------------------------------------------------*/}
         <View style={styles.logoAndInputsContainer}>

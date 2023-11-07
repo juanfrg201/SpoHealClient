@@ -33,10 +33,10 @@ const Home = ({ navigation }) => {
       <View style={styles.contentWrapper}>
         <Text style={[styles.title, styles.quicksandText]}>Bienvenido a Spoheal App</Text>
         <Text style={styles.subtitle}>¡Cuida de ti, cada día!</Text>
-        <TouchableOpacity style={styles.Button} onPress={goToRegister}>
+        <TouchableOpacity style={styles.Button} onPress={goToLogin}>
           <Text style={[styles.buttonText, styles.quicksandText]}>Inicia Sesión</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Button} onPress={goToLogin}>
+        <TouchableOpacity style={styles.Button} onPress={goToRegister}>
           <Text style={[styles.buttonText, styles.quicksandText]}>¡Registrate!</Text>
         </TouchableOpacity>
       </View>
